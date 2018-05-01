@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class Main extends AppCompatActivity {
 
@@ -44,10 +45,35 @@ public class Main extends AppCompatActivity {
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Salvando...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                //carregando os campos
+                EditText txtNome = findViewById(R.id.txtNome);
+                EditText txtTelefone = findViewById(R.id.txtTelefone);
+                EditText txtCelular = findViewById(R.id.txtCelular);
+                EditText txtEmail = findViewById(R.id.txtEmail);
+
+                //pegando os valores
+                String nome = txtNome.getText().toString();
+                String telefone = txtTelefone.getText().toString();
+                String celular = txtCelular.getText().toString();
+                String email = txtEmail.getText().toString();
+
+                //salvando os dados
+                ContatoDAO dao = new ContatoDAO(getBaseContext());
+                boolean sucesso = dao.salvar(nome, telefone, celular, email);
+                if(sucesso) {
+                    //limpa os campos
+                    txtNome.setText("");
+                    txtTelefone.setText("");
+                    txtCelular.setText("");
+                    txtEmail.setText("");
+
+                    Snackbar.make(view, "Oba!!! ;) Salvou!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    findViewById(R.id.includemain).setVisibility(View.VISIBLE);
+                    findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                }else {
+                    Snackbar.make(view, "Ops...=( Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
             }
         });
     }
