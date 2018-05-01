@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2196f3"
+    android:textColor="#fff">
+
+    <TextView
+    android:layout_height="wrap_content"
+    android:layout_width="0dp"
+    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+    android:id="@+id/nomeContato"
+    android:text="Nome do contato"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="8dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toLeftOf="@+id/btnEdit"
+    android:layout_marginRight="8dp"
+        android:textColor="#fff"/>
+
+    <ImageButton
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:id="@+id/btnEdit"
+    android:src="@android:drawable/ic_menu_edit"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_marginTop="8dp"
+    app:layout_constraintRight_toLeftOf="@+id/btnDelete"
+    android:layout_marginRight="8dp"
+        android:textColor="#fff"
+        android:background="#8bc34a"/>
+
+    <ImageButton
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:id="@+id/btnDelete"
+    android:src="@android:drawable/ic_delete"
+    android:layout_marginRight="8dp"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_marginTop="8dp"
+        android:background="#fff"
+        android:textColor="#fff"/>
+
+
+
+
+</android.support.constraint.ConstraintLayout>

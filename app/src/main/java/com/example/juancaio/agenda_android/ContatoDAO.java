@@ -2,6 +2,10 @@ package com.example.juancaio.agenda_android;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JuanCaio on 01/05/2018.
@@ -23,5 +27,35 @@ public class ContatoDAO {
         cv.put("Email", email);
 
         return gw.getDatabase().insert(TABLE_CONTATO, null, cv) > 0;
+    }
+
+    public List<Contato> retornaTodos(){
+        List<Contato> contatos = new ArrayList<>();
+        Cursor cursor = gw.getDatabase().rawQuery("SELECT * FROM Contatos" , null);
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("ID"));
+            String nome = cursor.getString(cursor.getColumnIndex("Nome"));
+            String telefone = cursor.getString(cursor.getColumnIndex("Telefone"));
+            String celular = cursor.getString(cursor.getColumnIndex("Celular"));
+            String email = cursor.getString(cursor.getColumnIndex("Email"));
+            contatos.add(new Contato(id, nome, telefone, celular, email));
+        }
+        cursor.close();
+        return contatos;
+    }
+
+    public Contato retornarUltimo(){
+        Cursor cursor = gw.getDatabase().rawQuery("SELECT * FROM Contatos ORDER BY ID DESC", null);
+        if(cursor.moveToFirst()){
+            int id = cursor.getInt(cursor.getColumnIndex("ID"));
+            String nome = cursor.getString(cursor.getColumnIndex("Nome"));
+            String telefone = cursor.getString(cursor.getColumnIndex("Telefone"));
+            String celular = cursor.getString(cursor.getColumnIndex("Celular"));
+            String email = cursor.getString(cursor.getColumnIndex("Email"));
+            cursor.close();
+            return new Contato(id, nome, telefone, celular, email);
+        }
+
+        return null;
     }
 }

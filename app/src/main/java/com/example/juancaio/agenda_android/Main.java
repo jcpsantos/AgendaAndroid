@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -30,10 +33,10 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        Button btnCancelar = (Button)findViewById(R.id.btnCancelar);
-        btnCancelar.setOnClickListener(new Button.OnClickListener(){
+        Button btnCancelar = (Button) findViewById(R.id.btnCancelar);
+        btnCancelar.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 findViewById(R.id.includemain).setVisibility(View.VISIBLE);
                 findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
                 findViewById(R.id.fab).setVisibility(View.VISIBLE);
@@ -41,7 +44,7 @@ public class Main extends AppCompatActivity {
 
         });
 
-        Button btnSalvar = (Button)findViewById(R.id.btnSalvar);
+        Button btnSalvar = (Button) findViewById(R.id.btnSalvar);
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,7 +63,9 @@ public class Main extends AppCompatActivity {
                 //salvando os dados
                 ContatoDAO dao = new ContatoDAO(getBaseContext());
                 boolean sucesso = dao.salvar(nome, telefone, celular, email);
-                if(sucesso) {
+                if (sucesso) {
+                    Contato contato = dao.retornarUltimo();
+                    adapter.adicionarContato(contato);
                     //limpa os campos
                     txtNome.setText("");
                     txtTelefone.setText("");
@@ -71,12 +76,31 @@ public class Main extends AppCompatActivity {
                     findViewById(R.id.includemain).setVisibility(View.VISIBLE);
                     findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
                     findViewById(R.id.fab).setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     Snackbar.make(view, "Ops...=( Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         });
     }
+
+    RecyclerView recyclerView;
+    ContatoAdapter adapter;
+
+    private void configurarRecycler() {
+        // Configurando o gerenciador de layout para ser uma lista.
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Adiciona o adapter que irá anexar os objetos à lista.
+        ContatoDAO dao = new ContatoDAO(this);
+        adapter = new ContatoAdapter(dao.retornaTodos());
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
