@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class Main extends AppCompatActivity {
 
@@ -22,8 +23,31 @@ public class Main extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
+                findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
+                findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+            }
+        });
+
+        Button btnCancelar = (Button)findViewById(R.id.btnCancelar);
+        btnCancelar.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
+                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
+                findViewById(R.id.fab).setVisibility(View.VISIBLE);
+            }
+
+        });
+
+        Button btnSalvar = (Button)findViewById(R.id.btnSalvar);
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Salvando...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
+                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
+                findViewById(R.id.fab).setVisibility(View.VISIBLE);
             }
         });
     }
