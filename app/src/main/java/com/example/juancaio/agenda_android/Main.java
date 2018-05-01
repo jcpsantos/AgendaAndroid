@@ -1,5 +1,6 @@
 package com.example.juancaio.agenda_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class Main extends AppCompatActivity {
 
@@ -62,10 +64,20 @@ public class Main extends AppCompatActivity {
 
                 //salvando os dados
                 ContatoDAO dao = new ContatoDAO(getBaseContext());
-                boolean sucesso = dao.salvar(nome, telefone, celular, email);
-                if (sucesso) {
+                boolean sucesso;
+                if(contatoEditado != null)
+                    sucesso = dao.salvar(contatoEditado.getId(), nome, telefone, celular, email);
+                else
+                    sucesso = dao.salvar(nome, telefone, celular, email);
+
+                if(sucesso) {
                     Contato contato = dao.retornarUltimo();
-                    adapter.adicionarContato(contato);
+                    if(contatoEditado != null){
+                        adapter.atualizarContato(contato);
+                        contatoEditado = null;
+                    }else
+                        adapter.adicionarContato(contato);
+
                     //limpa os campos
                     txtNome.setText("");
                     txtTelefone.setText("");
@@ -81,6 +93,24 @@ public class Main extends AppCompatActivity {
                 }
             }
         });
+
+        //verifica se começou agora ou se veio de uma edição
+        Intent intent = getIntent();
+        if(intent.hasExtra("contato")){
+            findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
+            findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
+            findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+            contatoEditado = (Contato) intent.getSerializableExtra("contato");
+            EditText txtNome = (EditText)findViewById(R.id.txtNome);
+            EditText txtTelefone = findViewById(R.id.txtTelefone);
+            EditText txtCelular = findViewById(R.id.txtCelular);
+            EditText txtEmail = findViewById(R.id.txtEmail);
+
+            txtNome.setText(contatoEditado.getNome());
+            txtTelefone.setText(contatoEditado.getTelefone());
+            txtCelular.setText(contatoEditado.getCelular());
+            txtEmail.setText(contatoEditado.getEmail());
+        }
     }
 
     RecyclerView recyclerView;
@@ -99,7 +129,19 @@ public class Main extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
     }
 
+    Contato contatoEditado = null;
 
+    private int getIndex(Spinner spinner, String myString)
+    {
+        int index = 0;
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
 
     @Override
