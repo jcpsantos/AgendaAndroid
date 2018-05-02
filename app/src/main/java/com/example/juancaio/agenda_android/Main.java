@@ -18,12 +18,44 @@ import android.widget.Spinner;
 
 public class Main extends AppCompatActivity {
 
+    Contato contatoEditado = null;
+
+    private int getIndex(Spinner spinner, String myString)
+    {
+        int index = 0;
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //verifica se começou agora ou se veio de uma edição
+        Intent intent = getIntent();
+        if(intent.hasExtra("contato")){
+            findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
+            findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
+            findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+            contatoEditado = (Contato) intent.getSerializableExtra("contato");
+            EditText txtNome = (EditText)findViewById(R.id.txtNome);
+            EditText txtTelefone = findViewById(R.id.txtTelefone);
+            EditText txtCelular = findViewById(R.id.txtCelular);
+            EditText txtEmail = findViewById(R.id.txtEmail);
+
+            txtNome.setText(contatoEditado.getNome());
+            txtTelefone.setText(contatoEditado.getTelefone());
+            txtCelular.setText(contatoEditado.getCelular());
+            txtEmail.setText(contatoEditado.getEmail());
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +111,7 @@ public class Main extends AppCompatActivity {
                         adapter.adicionarContato(contato);
 
                     //limpa os campos
+                    contatoEditado = null;
                     txtNome.setText("");
                     txtTelefone.setText("");
                     txtCelular.setText("");
@@ -94,23 +127,7 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        //verifica se começou agora ou se veio de uma edição
-        Intent intent = getIntent();
-        if(intent.hasExtra("contato")){
-            findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
-            findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
-            findViewById(R.id.fab).setVisibility(View.INVISIBLE);
-            contatoEditado = (Contato) intent.getSerializableExtra("contato");
-            EditText txtNome = (EditText)findViewById(R.id.txtNome);
-            EditText txtTelefone = findViewById(R.id.txtTelefone);
-            EditText txtCelular = findViewById(R.id.txtCelular);
-            EditText txtEmail = findViewById(R.id.txtEmail);
-
-            txtNome.setText(contatoEditado.getNome());
-            txtTelefone.setText(contatoEditado.getTelefone());
-            txtCelular.setText(contatoEditado.getCelular());
-            txtEmail.setText(contatoEditado.getEmail());
-        }
+        configurarRecycler();
     }
 
     RecyclerView recyclerView;
@@ -126,22 +143,11 @@ public class Main extends AppCompatActivity {
         ContatoDAO dao = new ContatoDAO(this);
         adapter = new ContatoAdapter(dao.retornaTodos());
         recyclerView.setAdapter(adapter);
+        // Configurando um separador entre linhas, para uma melhor visualização.
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
     }
 
-    Contato contatoEditado = null;
 
-    private int getIndex(Spinner spinner, String myString)
-    {
-        int index = 0;
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
 
 
     @Override

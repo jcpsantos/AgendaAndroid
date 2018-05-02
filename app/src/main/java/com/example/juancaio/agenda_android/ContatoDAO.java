@@ -64,4 +64,8 @@ public class ContatoDAO {
 
         return null;
     }
+
+    public boolean excluir(int id){
+        return gw.getDatabase().delete(TABLE_CONTATO, "ID=?", new String[]{ id + "" }) > 0;
+    }
 }
