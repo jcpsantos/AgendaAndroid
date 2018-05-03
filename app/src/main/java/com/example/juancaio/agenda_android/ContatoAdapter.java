@@ -52,6 +52,9 @@ public class ContatoAdapter extends RecyclerView.Adapter<ContatoHolder> {
     @Override
     public void onBindViewHolder(ContatoHolder holder, int position){
         holder.nomeContato.setText(contatos.get(position).getNome());
+        holder.numeroTelefone.setText(contatos.get(position).getTelefone());
+        holder.numeroCelular.setText(contatos.get(position).getCelular());
+        holder.nomeEmail.setText(contatos.get(position).getEmail());
         final Contato contato = contatos.get(position);
         holder.btnExcluir.setOnClickListener(new Button.OnClickListener() {
             @Override

@@ -19,22 +19,6 @@ public class ContatoDAO {
         gw = DbGateway.getInstance(ctx);
     }
 
-    public boolean salvar(String nome, String telefone, String celular, String email){
-        return salvar(0, nome, telefone, celular, email);
-    }
-
-    public boolean salvar(int id, String nome, String telefone, String celular, String email){
-        ContentValues cv = new ContentValues();
-        cv.put("Nome", nome);
-        cv.put("Telefone", telefone);
-        cv.put("Celular", celular);
-        cv.put("Email", email);
-        if(id > 0)
-            return gw.getDatabase().update(TABLE_CONTATO, cv, "ID=?", new String[]{ id + "" }) > 0;
-        else
-            return gw.getDatabase().insert(TABLE_CONTATO, null, cv) > 0;
-    }
-
     public List<Contato> retornaTodos(){
         List<Contato> contatos = new ArrayList<>();
         Cursor cursor = gw.getDatabase().rawQuery("SELECT * FROM Contatos" , null);
@@ -64,6 +48,26 @@ public class ContatoDAO {
 
         return null;
     }
+
+    public boolean salvar(String nome, String telefone, String celular, String email){
+        return salvar(0, nome, telefone, celular, email);
+    }
+
+    public boolean salvar(int id, String nome, String telefone, String celular, String email){
+        ContentValues cv = new ContentValues();
+        cv.put("Nome", nome);
+        cv.put("Telefone", telefone);
+        cv.put("Celular", celular);
+        cv.put("Email", email);
+        if(id > 0)
+            return gw.getDatabase().update(TABLE_CONTATO, cv, "ID=?", new String[]{ id + "" }) > 0;
+        else
+            return gw.getDatabase().insert(TABLE_CONTATO, null, cv) > 0;
+    }
+
+
+
+
 
     public boolean excluir(int id){
         return gw.getDatabase().delete(TABLE_CONTATO, "ID=?", new String[]{ id + "" }) > 0;

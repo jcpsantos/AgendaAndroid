@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Crud.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private final String CREATE_TABLE = "CREATE TABLE Contatos (ID INTEGER PRIMARY KEY AUTOINCREMENT, Nome TEXT NOT NULL, Telefone TEXT NOT NULL, Celular TEXT NOT NULL, Email TEXT NOT NULL);";
 
     public DbHelper(Context context){
@@ -24,6 +24,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-
+        db.execSQL("DROP TABLE IF EXISTS Contatos");
     }
 }
