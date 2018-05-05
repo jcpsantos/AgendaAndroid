@@ -13,86 +13,86 @@
     android:textColor="#fff">
 
     <EditText
-    android:id="@+id/txtNome"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="8dp"
-    android:ems="10"
-    android:hint="Nome do Contato"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
+        android:id="@+id/txtNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nome do Contato"
         android:textColor="#fff"/>
 
     <EditText
         android:id="@+id/txtTelefone"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Telefone"
         android:inputType="numberDecimal"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:textColor="#fff"/>
 
     <EditText
         android:id="@+id/txtCelular"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Celular"
         android:inputType="numberDecimal"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:textColor="#fff"/>
 
     <EditText
         android:id="@+id/txtEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Email"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:textColor="#fff"/>
 
-    <Button
-    android:id="@+id/btnCancelar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Cancelar"
-    android:layout_marginLeft="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:background="#f44336"
-        android:textColor="#fff"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:text="Agenda"
+        android:ems="10"/>
+
+    <RadioGroup
+        android:id="@+id/agenda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8px">
+
+        <RadioButton
+            android:id="@+id/agenda1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agenda 1"
+            android:textColor="#fff"/>
+
+        <RadioButton
+            android:id="@+id/agenda2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agenda 2"
+            android:textColor="#fff"/>
+
+
+    </RadioGroup>
 
     <Button
-    android:id="@+id/btnSalvar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Salvar"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginLeft="8dp"
+        android:id="@+id/btnSalvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar"
+        android:layout_marginBottom="8px"
         android:background="#4caf50"
         android:textColor="#fff" />
 
-
-
-
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancelar"
+        android:layout_marginTop="8px"
+        android:background="#f44336"
+        android:textColor="#fff"/>
 
 </LinearLayout>
 

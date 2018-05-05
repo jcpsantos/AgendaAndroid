@@ -14,9 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 public class Main extends AppCompatActivity {
+
 
     Contato contatoEditado = null;
 
@@ -55,6 +58,14 @@ public class Main extends AppCompatActivity {
             txtTelefone.setText(contatoEditado.getTelefone());
             txtCelular.setText(contatoEditado.getCelular());
             txtEmail.setText(contatoEditado.getEmail());
+            if(contatoEditado.getN_agenda() != null){
+                RadioButton rb;
+                if (contatoEditado.getN_agenda().equals("Agenda 1"))
+                    rb = findViewById(R.id.agenda1);
+                else
+                    rb = findViewById(R.id.agenda2);
+                rb.setChecked(true);
+            }
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,9 +85,24 @@ public class Main extends AppCompatActivity {
                 findViewById(R.id.includemain).setVisibility(View.VISIBLE);
                 findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
                 findViewById(R.id.fab).setVisibility(View.VISIBLE);
+
+                EditText txtNome = findViewById(R.id.txtNome);
+                EditText txtTelefone = findViewById(R.id.txtTelefone);
+                EditText txtCelular = findViewById(R.id.txtCelular);
+                EditText txtEmail = findViewById(R.id.txtEmail);
+                RadioGroup rgAgenda = findViewById(R.id.agenda);
+
+                txtNome.setText("");
+                txtTelefone.setText("");
+                txtCelular.setText("");
+                txtEmail.setText("");
+                rgAgenda.setSelected(false);
+
             }
 
         });
+
+
 
         Button btnSalvar = (Button) findViewById(R.id.btnSalvar);
         btnSalvar.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +110,7 @@ public class Main extends AppCompatActivity {
             public void onClick(View view) {
                 //carregando os campos
                 EditText txtNome = findViewById(R.id.txtNome);
+                RadioGroup rgAgenda = findViewById(R.id.agenda);
                 EditText txtTelefone = findViewById(R.id.txtTelefone);
                 EditText txtCelular = findViewById(R.id.txtCelular);
                 EditText txtEmail = findViewById(R.id.txtEmail);
@@ -93,38 +120,48 @@ public class Main extends AppCompatActivity {
                 String telefone = txtTelefone.getText().toString();
                 String celular = txtCelular.getText().toString();
                 String email = txtEmail.getText().toString();
+                String agenda = rgAgenda.getCheckedRadioButtonId() == R.id.agenda1 ? "Agenda 1" : "Agenda 2";
 
-                //salvando os dados
-                ContatoDAO dao = new ContatoDAO(getBaseContext());
-                boolean sucesso;
-                if(contatoEditado != null)
-                    sucesso = dao.salvar(contatoEditado.getId(), nome, telefone, celular, email);
-                else
-                    sucesso = dao.salvar(nome, telefone, celular, email);
 
-                if(sucesso) {
-                    Contato contato = dao.retornarUltimo();
-                    if(contatoEditado != null){
-                        adapter.atualizarContato(contato);
+                if (nome.equals("") || telefone.equals("") || celular.equals("") || email.equals("")){
+                    Snackbar.make(view, "Ops...=( Dados em branco, por favor complete todos os dados do contato!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }else {
+                    //salvando os dados
+                    ContatoDAO dao = new ContatoDAO(getBaseContext());
+                    boolean sucesso;
+                    if(contatoEditado != null)
+                        sucesso = dao.salvar(contatoEditado.getId(), agenda , nome, telefone, celular, email);
+                    else
+                        sucesso = dao.salvar(agenda, nome, telefone, celular, email);
+
+                    if(sucesso) {
+                        Contato contato = dao.retornarUltimo();
+                        if(contatoEditado != null){
+                            adapter.atualizarContato(contato);
+                            contatoEditado = null;
+                        }else
+                            adapter.adicionarContato(contato);
+
+                        //limpa os campos
                         contatoEditado = null;
-                    }else
-                        adapter.adicionarContato(contato);
+                        txtNome.setText("");
+                        txtTelefone.setText("");
+                        txtCelular.setText("");
+                        txtEmail.setText("");
+                        rgAgenda.setSelected(false);
 
-                    //limpa os campos
-                    contatoEditado = null;
-                    txtNome.setText("");
-                    txtTelefone.setText("");
-                    txtCelular.setText("");
-                    txtEmail.setText("");
+                        Snackbar.make(view, "Oba!!! ;) Salvou!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        findViewById(R.id.includemain).setVisibility(View.VISIBLE);
+                        findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                    } else {
+                        Snackbar.make(view, "Ops...=( Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
 
-                    Snackbar.make(view, "Oba!!! ;) Salvou!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                    findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.fab).setVisibility(View.VISIBLE);
-                } else {
-                    Snackbar.make(view, "Ops...=( Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
+
             }
+
         });
 
         configurarRecycler();
@@ -133,11 +170,13 @@ public class Main extends AppCompatActivity {
     RecyclerView recyclerView;
     ContatoAdapter adapter;
 
+
     private void configurarRecycler() {
         // Configurando o gerenciador de layout para ser uma lista.
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
 
         // Adiciona o adapter que irá anexar os objetos à lista.
         ContatoDAO dao = new ContatoDAO(this);
@@ -145,10 +184,8 @@ public class Main extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         // Configurando um separador entre linhas, para uma melhor visualização.
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -8,13 +8,15 @@ import java.io.Serializable;
 
 public class Contato implements Serializable {
     private int id;
+    private String n_agenda;
     private String nome;
     private String telefone;
     private String celular;
     private String email;
 
-    public Contato(int id, String nome, String telefone, String celular, String email){
+    public Contato(int id, String n_agenda, String nome, String telefone, String celular, String email){
         this.id = id;
+        this.n_agenda = n_agenda;
         this.nome = nome;
         this.telefone = telefone;
         this.celular = celular;
@@ -22,6 +24,9 @@ public class Contato implements Serializable {
     }
 
     public int getId(){return this.id;}
+    public String getN_agenda() {
+        return this.n_agenda;
+    }
     public String getNome(){return this.nome;}
     public String getTelefone(){return this.telefone;}
     public String getCelular(){return this.celular;}
